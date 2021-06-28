@@ -14,9 +14,9 @@ class ListScreen extends StatelessWidget {
       if (size.maxWidth < 700) {
         return Mobile(country);
       } else if (size.maxWidth > 700 && size.maxWidth < 1035) {
-        return TabletOrDeskTop(country, false);
+        return Tablet(country: country);
       }
-      return TabletOrDeskTop(country, true);
+      return Desktop(country: country);
     });
   }
 }
@@ -59,10 +59,9 @@ class Mobile extends StatelessWidget {
   }
 }
 
-class TabletOrDeskTop extends StatelessWidget {
+class Tablet extends StatelessWidget {
   final List<Country> country;
-  final bool isDesktop;
-  TabletOrDeskTop(this.country, this.isDesktop);
+  Tablet({required this.country});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +76,7 @@ class TabletOrDeskTop extends StatelessWidget {
           return item(country[index]);
         },
         staggeredTileBuilder: (int index) =>
-        new StaggeredTile.count(2,  isDesktop ? 2 : 3 ),
+        new StaggeredTile.count(2,   3 ),
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
       )
@@ -101,20 +100,51 @@ class TabletOrDeskTop extends StatelessWidget {
           ),
         ),
       ]),
-      // child: ListTile(
-      //   leading: Container(
-      //     width: 100,
-      //     height: 100,
-      //     child: SvgPicture.network(
-      //     country.flag!,
-      //     fit: BoxFit.fill,
-      //     width: 100,
-      //     height: 100,),
-      //   ),
-      //   title: Text('${country.name}'),
-      //   subtitle: Text('${country.region}'),
-      //   trailing: Text('${country.population}'),
-      // ),
     );
   }
 }
+class Desktop extends StatelessWidget {
+  final List<Country> country;
+
+  const Desktop({required this.country});
+
+  @override
+  Widget build(BuildContext context) {
+   return  ConstrainedBox(
+      constraints: BoxConstraints.expand(width: double.infinity),
+      child: DataTable(
+
+          columns: [
+            DataColumn(label: Text('Country Flag')),
+            DataColumn(label: Text('Country Name')),
+            DataColumn(label: Text('Country Region')),
+            DataColumn(label: Text('Country Population')),
+          ],
+          rows:
+          country.map((country){
+            return DataRow(cells: [
+              DataCell(
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: SvgPicture.network(
+                    country.flag!,
+                    fit: BoxFit.fill,
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              ),
+              DataCell(Text('${country.name}')),
+              DataCell(Text('${country.region}')),
+              DataCell(Text('${country.population}')),
+            ]);
+          }).toList()
+
+
+      )
+    );
+
+  }
+}
+
