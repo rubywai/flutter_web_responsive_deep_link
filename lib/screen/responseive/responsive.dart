@@ -33,12 +33,12 @@ class Mobile extends StatelessWidget {
       body: ListView.builder(
           itemCount: country.length,
           itemBuilder: (context, pos) {
-            return item(country[pos]);
+            return MobileItem(country[pos]);
           }),
     );
   }
 
-  Widget item(Country country) {
+  Widget MobileItem(Country country) {
     return Card(
       child: ListTile(
         leading: Container(
@@ -73,7 +73,7 @@ class Tablet extends StatelessWidget {
 
         itemCount: country.length,
         itemBuilder: (BuildContext context, int index) {
-          return item(country[index]);
+          return TabletItem(country[index]);
         },
         staggeredTileBuilder: (int index) =>
         new StaggeredTile.count(2,   3 ),
@@ -83,7 +83,7 @@ class Tablet extends StatelessWidget {
     );
   }
 
-  Widget item(Country country) {
+  Widget TabletItem(Country country) {
     return Card(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text('${country.name}'),
